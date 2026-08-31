@@ -1,0 +1,34 @@
+# Caddyfile
+# ----------
+# {$DOMAIN} is filled in from the DOMAIN environment variable (see
+# docker-compose.yml / .env). Caddy automatically obtains and renews a free
+# Let's Encrypt TLS certificate for it -- no manual certbot/nginx config
+# needed. This is required: browsers only allow camera access
+# (getUserMedia) over HTTPS (or localhost), and this app needs the camera
+# on every device that joins a meeting.
+#
+# For local testing without a domain, run docker-compose with
+# DOMAIN=localhost -- Caddy then serves plain HTTP on port 80 instead of
+# requesting a certificate (camera access will only work from the same
+# machine in that case, since only localhost is exempt from the HTTPS
+# requirement).
+
+{$DOMAIN}
+
+encode gzip
+
+@api path /api/*
+handle @api {
+    reverse_proxy backend:8000
+}
+
+@ws path /ws/*
+handle @ws {
+    reverse_proxy backend:8000
+}
+
+handle {
+    root * /srv
+    try_files {path} /index.html
+    file_server
+}

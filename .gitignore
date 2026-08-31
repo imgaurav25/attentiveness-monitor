@@ -1,0 +1,89 @@
+# ==============================
+# Python
+# ==============================
+
+# Virtual environments
+venv/
+backend/venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# ==============================
+# Node / Frontend
+# ==============================
+
+node_modules/
+frontend/node_modules/
+
+# Build output
+dist/
+build/
+frontend/dist/
+
+
+# ==============================
+# Environment / Secrets
+# ==============================
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+
+# ==============================
+# Runtime / Generated Data
+# ==============================
+
+logs/*
+logs/snapshots/*
+
+# Generated Excel reports
+*.xlsx
+*.xls
+
+
+# ==============================
+# Face Recognition Data
+# ==============================
+
+# Registered participant faces
+data/registered_faces/
+data/faces/
+registered_faces/
+
+# Unknown-person captures
+data/unknown/
+unknown_faces/
+
+
+# ==============================
+# IDE / Editor
+# ==============================
+
+.vscode/
+.idea/
+
+
+# ==============================
+# Operating System
+# ==============================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# ==============================
+# Temporary Files
+# ==============================
+
+*.tmp
+*.temp
+*.bak
+*.swp

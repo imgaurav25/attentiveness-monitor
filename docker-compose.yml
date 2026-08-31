@@ -1,0 +1,54 @@
+# docker-compose.yml
+# -------------------
+# Production deployment. Two containers:
+#   backend  - FastAPI, all the detection/meeting logic
+#   frontend - the built React app served by Caddy, which also
+#              reverse-proxies /api and /ws to the backend and gets you
+#              free automatic HTTPS (required for camera access on any
+#              device other than localhost)
+#
+# Setup (see README.md "Production deployment" section for the full walkthrough):
+#   1. cp .env.example .env   and fill in DOMAIN (and ALLOWED_ORIGINS)
+#   2. ./scripts/init_data_dir.sh   (creates ./data with empty placeholder
+#      files -- REQUIRED before first run, see script comments for why)
+#   3. docker compose up -d --build
+#
+# Data (the Excel log, snapshots, registered-student roster, settings)
+# persists in ./data on the host across rebuilds/restarts.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+    volumes:
+      - ./data/logs:/app/logs
+      - ./data/dataset:/app/dataset
+      - ./data/labels.json:/app/labels.json
+      - ./data/trained_model.yml:/app/trained_model.yml
+      - ./data/settings.json:/app/settings.json
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - DOMAIN=${DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
