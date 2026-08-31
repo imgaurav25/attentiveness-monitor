@@ -63,6 +63,15 @@ unknown_faces/
 
 
 # ==============================
+# Personal Face Recognition Data
+# ==============================
+
+dataset/
+labels.json
+trained_model.yml
+
+
+# ==============================
 # IDE / Editor
 # ==============================
 
